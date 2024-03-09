@@ -1,8 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Movie, MovieDocument } from './movies.schema';
 import { MovieDto } from './dto/movie.dto';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 interface MovieQuery {
   title?: string;
@@ -13,10 +15,18 @@ interface MovieQuery {
 export class MoviesService {
   constructor(
     @InjectModel(Movie.name) private movieModel: Model<MovieDocument>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async getAllMovies(): Promise<Movie[]> {
-    return this.movieModel.find().exec();
+    const cachedMovies = await this.cacheManager.get<Movie[]>('movies');
+    if (cachedMovies) {
+      console.log(cachedMovies);
+      return cachedMovies;
+    }
+    const movies = await this.movieModel.find().exec();
+    await this.cacheManager.set('movies', movies, 300000);
+    return movies;
   }
 
   async searchMovie(title: string, genre: string): Promise<Movie[]> {
@@ -32,7 +42,9 @@ export class MoviesService {
   }
 
   async createMovie(movieDto: MovieDto): Promise<Movie> {
-    return this.movieModel.create(movieDto);
+    const createdMovie = this.movieModel.create(movieDto);
+    await this.cacheManager.del('movies');
+    return createdMovie;
   }
 
   async updateMovie(id: string, movieDto: MovieDto): Promise<Movie> {

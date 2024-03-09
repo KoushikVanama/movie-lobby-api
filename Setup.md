@@ -34,3 +34,6 @@
   - Install mongodb package to connect to mongo driver using this command `npm install mongodb`
   - Update your own credentials and cluster name inorder to connect to mongo database in `app.module.ts` file
 
+# Steps to include Caching
+  - `npm install @nestjs/cache-manager cache-manager`
+
