@@ -52,17 +52,17 @@ $ npm run test:cov
   - npm install --save @nestjs/swagger swagger-ui-express
   - Add below configuration in your `main.ts` file
     <code>
-      const options = new DocumentBuilder()<br />
-      .setTitle('Your API Title')<br />
-      .setDescription('Your API description')<br />
-      .setVersion('1.0')<br />
-      .addServer('http://localhost:3000/', 'Local environment')<br />
-      .addServer('https://staging.yourapi.com/', 'Staging')<br />
-      .addServer('https://production.yourapi.com/', 'Production')<br />
-      .addTag('Your API Tag')<br />
-      .build();<br />
-      const document = SwaggerModule.createDocument(app, options);<br />
-      SwaggerModule.setup('api-docs', app, document);<br />
+        const options = new DocumentBuilder()\
+        .setTitle('Your API Title')\
+        .setDescription('Your API description')\
+        .setVersion('1.0')\
+        .addServer('http://localhost:3000/', 'Local environment')\
+        .addServer('https://staging.yourapi.com/', 'Staging')\
+        .addServer('https://production.yourapi.com/', 'Production')\
+        .addTag('Your API Tag')\
+        .build();\
+        const document = SwaggerModule.createDocument(app, options);\
+        SwaggerModule.setup('api-docs', app, document);\
     <code>
   - Now you can access swagger at [http://localhost:3000/api-docs]
 
