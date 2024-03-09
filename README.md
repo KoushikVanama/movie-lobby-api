@@ -1,32 +1,7 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
 ## Installation
+
+clone the application using this command `git clone git@github.com:KoushikVanama/movie-lobby-api.git `
 
 ```bash
 $ npm install
@@ -58,16 +33,45 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
+ 
+## Steps to setup the application:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- `npm i -g @nestjs/cli`
+- `nest new movie-lobby-api`
+- `cd movie-lobby-api`
+- `npm install --save @nestjs/mongoose mongoose`
 
-## Stay in touch
+- Run these commands so as to generate files required for movies module
+  - `nest generate module movies`
+  - `nest generate controller movies`
+  - `nest generate service movies`
+  - `nest generate class movies/dto/movie.dto`
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
-## License
+## steps to setup swagger
+  - npm install --save @nestjs/swagger swagger-ui-express
+  - Add below configuration in your `main.ts` file
+    <code>
+      const options = new DocumentBuilder()<br />
+      .setTitle('Your API Title')<br />
+      .setDescription('Your API description')<br />
+      .setVersion('1.0')<br />
+      .addServer('http://localhost:3000/', 'Local environment')<br />
+      .addServer('https://staging.yourapi.com/', 'Staging')<br />
+      .addServer('https://production.yourapi.com/', 'Production')<br />
+      .addTag('Your API Tag')<br />
+      .build();<br />
 
-Nest is [MIT licensed](LICENSE).
+    const document = SwaggerModule.createDocument(app, options);<br />
+    SwaggerModule.setup('api-docs', app, document);<br />
+    <code>
+  - Now you can access swagger at [http://localhost:3000/api-docs]
+
+## steps to connect to Mongo Atlas
+  - Install mongodb package to connect to mongo driver using this command `npm install mongodb`
+  - Update your own credentials and cluster name inorder to connect to mongo database in `app.module.ts` file
+
+## Steps to include Caching
+  - Install cache package using this command `npm install @nestjs/cache-manager cache-manager`
+
+
