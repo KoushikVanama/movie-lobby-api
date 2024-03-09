@@ -11,3 +11,12 @@
   - nest generate controller movies
   - nest generate service movies
   - nest generate class movies/dto/movie.dto
+
+
+# steps to setup swagger
+  - npm install --save @nestjs/swagger swagger-ui-express
+
+# steps to connect to Mongo Atlas
+  - Install mongodb package to connect to mongo driver using this command `npm install mongodb`
+  - Update your own credentials and cluster name inorder to connect to mongo database in `app.module.ts` file
+
