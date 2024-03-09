@@ -61,9 +61,8 @@ $ npm run test:cov
       .addServer('https://production.yourapi.com/', 'Production')<br />
       .addTag('Your API Tag')<br />
       .build();<br />
-
-    const document = SwaggerModule.createDocument(app, options);<br />
-    SwaggerModule.setup('api-docs', app, document);<br />
+      const document = SwaggerModule.createDocument(app, options);<br />
+      SwaggerModule.setup('api-docs', app, document);<br />
     <code>
   - Now you can access swagger at [http://localhost:3000/api-docs]
 
