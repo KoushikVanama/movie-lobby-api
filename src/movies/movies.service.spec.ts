@@ -4,11 +4,16 @@ import { MoviesService } from './movies.service';
 import { MovieDto } from './dto/movie.dto';
 import { Movie, MovieDocument } from './movies.schema';
 import { Model } from 'mongoose';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 describe('MoviesService', () => {
   let service: MoviesService;
   let mockMovieModel: Model<MovieDocument>;
-
+  const mockCacheManager = {
+    get: jest.fn(),
+    set: jest.fn(),
+    del: jest.fn(),
+  };
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -19,6 +24,10 @@ describe('MoviesService', () => {
             find: jest.fn(),
             create: jest.fn(),
           },
+        },
+        {
+          provide: CACHE_MANAGER,
+          useValue: mockCacheManager,
         },
       ],
     }).compile();
@@ -34,7 +43,24 @@ describe('MoviesService', () => {
   });
 
   describe('getAllMovies', () => {
-    it('should return an array of movies', async () => {
+    it('should return movies from cache if available', async () => {
+      const cachedMovies: Movie[] = [
+        {
+          title: 'cached',
+          genre: 'cached',
+          rating: 9,
+          streamingLink: 'cached',
+        },
+      ];
+      mockCacheManager.get.mockResolvedValueOnce(cachedMovies);
+
+      const result = await service.getAllMovies();
+
+      expect(result).toEqual(cachedMovies);
+      expect(mockCacheManager.get).toBeCalledWith('movies');
+    });
+
+    it('should return movies from database', async () => {
       const movies: Movie[] = [
         {
           title: 'abc',
@@ -43,6 +69,7 @@ describe('MoviesService', () => {
           streamingLink: 'https://www.abc.com',
         },
       ];
+      mockCacheManager.get.mockResolvedValueOnce(null);
       jest.spyOn(mockMovieModel, 'find').mockReturnValueOnce({
         exec: jest.fn().mockResolvedValueOnce(movies),
       } as any);
@@ -64,6 +91,7 @@ describe('MoviesService', () => {
       const result = await service.createMovie(newMovieDto);
 
       expect(result).toEqual(createdMovie);
+      expect(mockCacheManager.del).toBeCalledWith('movies');
     });
   });
 });
