@@ -32,8 +32,7 @@ export class MoviesService {
   }
 
   async createMovie(movieDto: MovieDto): Promise<Movie> {
-    const createdMovie = new this.movieModel(movieDto);
-    return createdMovie.save();
+    return this.movieModel.create(movieDto);
   }
 
   async updateMovie(id: string, movieDto: MovieDto): Promise<Movie> {
