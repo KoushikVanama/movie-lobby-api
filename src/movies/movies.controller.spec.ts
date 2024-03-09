@@ -4,6 +4,7 @@ import { MoviesService } from './movies.service';
 import { MovieDto } from './dto/movie.dto';
 import { Movie } from './movies.schema';
 import { getModelToken } from '@nestjs/mongoose';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
 describe('MoviesController', () => {
   let controller: MoviesController;
@@ -16,6 +17,10 @@ describe('MoviesController', () => {
         MoviesService,
         {
           provide: getModelToken(Movie.name),
+          useValue: {},
+        },
+        {
+          provide: CACHE_MANAGER,
           useValue: {},
         },
       ],
